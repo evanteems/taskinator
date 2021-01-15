@@ -1,39 +1,44 @@
-console.log(window.document);
+var formEl = document.querySelector("#task-form");
+var tasksToDoEl = document.querySelector("#tasks-to-do");
 
-console.dir(window.document);
+var taskFormHandler = function(event) {
+  event.preventDefault();
+  var taskNameInput = document.querySelector("input[name='task-name'").value;
+  var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
-window.document.querySelector("button");
-let btn = window.document.querySelector("button");
-console.dir(btn);
+  // check if inputs are empty (validate)
+  if (taskNameInput === "" || taskTypeInput === "") {
+    alert("You need to fill out the task form!");
+    return false;
+  }
+  
+  formEl.reset();
 
-document.querySelector(".btn");
+  // reset form fields for next task to be entered
+  document.querySelector("input[name='task-name']").value = "";
+  document.querySelector("select[name='task-type']").selectedIndex = 0;
 
-document.querySelector("button").textContent;
+  var taskDataObj = {
+    name: taskNameInput,
+    type: taskTypeInput
+  };
 
-document.querySelector("#save-task");
-let buttonEl = document.querySelector("#save-task");
-console.log(buttonEl);
+  createTaskEl(taskDataObj);
+};
 
-buttonEl.addEventListener("click", function() {
-    alert("button clicked");
-});
+var createTaskEl = function(taskDataObj) {
+  // create list item
+  var listItemEl = document.createElement("li");
+  listItemEl.className = "task-item";
 
-document.createElement("li");
-let taskItemEl = document.createElement("li");
-taskItemEl;
-taskItemEl;
+  // create div to hold task info and add to list item
+  var taskInfoEl = document.createElement("div");
+  taskInfoEl.className = "task-info";
+  taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
+  listItemEl.appendChild(taskInfoEl);
 
-let tasksToDoEl = document.querySelector("#task-to-do");
+  console.dir(listItemEl);
+  tasksToDoEl.appendChild(listItemEl);
+};
 
-tasksToDoEl.appendChild(taskItemEl);
-
-taskItemEl.className = "task-item";
-
-buttonEl.addEventListener("click", function() {
-    let listItemEl = document.createElement("li");
-    listItemEl.className = "task-item";
-    listItemEl.textContent = "this is a new task.";
-    tasksToDoEl.appendChild(listItemEl);
-});
-
-buttonEl.addEventListener("click", createTaskHandler);
+formEl.addEventListener("submit", taskFormHandler);
